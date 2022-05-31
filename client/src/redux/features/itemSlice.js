@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import * as api from "../api";
 
+import * as api from "../api";
 export const fetchItems = createAsyncThunk(
   "items",
   async ({ toast }, { rejectWithValue }) => {
@@ -10,6 +10,22 @@ export const fetchItems = createAsyncThunk(
       return res.data;
     } catch (error) {
       toast.error("internal server error");
+      return rejectWithValue(error.res.data);
+    }
+  }
+);
+export const order = createAsyncThunk(
+  "order",
+  async ({ toast, obj, navigate }, { rejectWithValue }) => {
+    try {
+      console.log(obj);
+      const res = await api.newOrder(obj);
+      console.log(res);
+      toast.success("Order Placed Successfully");
+      navigate("/orders");
+      return res.data;
+    } catch (error) {
+      toast.error("Not able to place order ");
       return rejectWithValue(error.res.data);
     }
   }
@@ -84,6 +100,17 @@ const itemSlice = createSlice({
       state.items = action.payload;
     },
     [fetchItems.rejected]: (state, action) => {
+      state.loading = true;
+    },
+    [order.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [order.fulfilled]: (state, action) => {
+      state.cart = [];
+      state.loading = false;
+      state.cartTotalQty = 0;
+    },
+    [order.rejected]: (state, action) => {
       state.loading = true;
     },
   },

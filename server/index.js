@@ -6,7 +6,17 @@ const itemRouter = require("./routers/itemRouter");
 const morgan = require("morgan");
 const queryRouter = require("./routers/queryRouter");
 const authRouter = require("./routers/authRouter");
+const authMiddleware = require("./middleware/auth-middleware");
+const orderRouter = require("./routers/orderRouter");
+const cors = require("cors");
+
 require("dotenv").config();
+const corsOptions = {
+  origin: process.env.CLIENT_LINK,
+  credentials: true,
+};
+app.use(cookieParser());
+app.use(cors(corsOptions));
 const db_link = process.env.DB_LINK;
 mongoose
   .connect(db_link, {
@@ -19,19 +29,24 @@ mongoose
   .catch(function (err) {
     console.log(err);
   });
+
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.CLIENT_LINK);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", process.env.CLIENT_LINK);
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
+
 app.use(express.json());
-app.use(cookieParser());
 app.listen(5000);
 app.use("/items", itemRouter);
 app.use("/query", queryRouter);
 app.use("/user", authRouter);
+app.use("/order", authMiddleware, orderRouter);
+// app.use("/admin", adminMiddleware, )

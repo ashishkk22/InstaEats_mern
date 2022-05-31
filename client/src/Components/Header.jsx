@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../images/logo.png";
-import cart from "../images/cart_.png";
+import cartImage from "../images/cart_.png";
 import { useSelector } from "react-redux";
 const Header = () => {
-  const { cartTotalQty } = useSelector(state => ({ ...state.item }));
-  useEffect(() => {}, [cartTotalQty]);
+  const { cartTotalQty, cart } = useSelector(state => ({ ...state.item }));
+  const { authenticated } = useSelector(state => ({ ...state.auth }));
+  useEffect(() => {}, [cartTotalQty, cart, authenticated]);
   return (
     <>
       <nav className="relative container mx-auto flex items-center justify-between font-semibold py-4">
@@ -20,15 +21,31 @@ const Header = () => {
             <li className="ml-6 hover:text-primaryWeb rounded-lg p-1  delay-100 px-2">
               <Link to="/">Home</Link>
             </li>
-            <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
-              <Link to="/signup">Sign Up</Link>
-            </li>
-            <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
-              <Link to="/signin">Sign In</Link>
-            </li>
+            {authenticated ? (
+              <>
+                <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
+                  <Link to="/orders">Orders</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
+                  <Link to="/signup">Sign Up</Link>
+                </li>
+                <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
+                  <Link to="/signin">Sign In</Link>
+                </li>
+              </>
+            )}
+
             <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
               <Link to="/contactus">ContactUs</Link>
             </li>
+            {authenticated && (
+              <li className="ml-6 hover:text-primaryWeb rounded-lg p-1   delay-100 px-2">
+                <Link to="/orders">Logout</Link>
+              </li>
+            )}
             <li className="ml-6 bg-primaryWeb rounded-lg p-1 hover:bg-orange-500  delay-75 px-2 ">
               <Link
                 to="cart"
@@ -38,7 +55,7 @@ const Header = () => {
                   <h1 className="text-secondaryWeb mx-1">{cartTotalQty}</h1>
                 )}
 
-                <img src={cart} alt="cart" />
+                <img src={cartImage} alt="cart" />
               </Link>
             </li>
           </ul>

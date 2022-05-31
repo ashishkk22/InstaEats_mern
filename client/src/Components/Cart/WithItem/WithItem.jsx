@@ -1,21 +1,42 @@
 import React, { useEffect } from "react";
 import cartBlack from "../../../images/cart-black.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   totalPrice,
   addToCart,
   decreaseCart,
+  order,
 } from "../../../redux/features/itemSlice";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const WithItem = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cart, itemTotalPrice } = useSelector(state => ({ ...state.item }));
+  const { authenticated } = useSelector(state => ({ ...state.auth }));
   useEffect(() => {
     console.log("cart useEffect called");
     dispatch(totalPrice());
   }, [cart, dispatch]);
-  const isLoggedIn = true;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmitData = async dataForm => {
+    const array = cart.map(item => {
+      return item._id;
+    });
+    const obj = {
+      item: array,
+      totalPrice: itemTotalPrice,
+      ...dataForm,
+    };
+    dispatch(order({ toast, navigate, obj }));
+  };
   return (
     <>
       <section className="bg-secondaryWeb py-16">
@@ -78,21 +99,49 @@ const WithItem = () => {
               </span>
             </div>
             <div className="">
-              <form action="" className="flex flex-col justify-center">
+              <form
+                action=""
+                className="flex flex-col justify-center"
+                onSubmit={handleSubmit(onSubmitData)}
+              >
                 <input
                   type="text"
+                  {...register("mobile", {
+                    required: "Please enter the correct mobile number",
+                    minLength: {
+                      value: 10,
+                      message: "Please enter the correct mobile number",
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "Please enter the correct mobile number",
+                    },
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Please enter the correct mobile number",
+                    },
+                  })}
                   className="border p-2 mt-8 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
                   placeholder="Phone Number"
                 />
+                <p className="text-primaryWeb">{errors.name?.message}</p>
                 <input
                   type="text"
+                  {...register("address", {
+                    required: "Please enter the correct address",
+                    minLength: {
+                      value: 10,
+                      message: "Please enter the correct address",
+                    },
+                  })}
                   className="border p-2 mt-4 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
                   placeholder="Address"
                 />
+                <p className="text-primaryWeb">{errors.name?.message}</p>
                 <div className="flex justify-end mt-4">
-                  {isLoggedIn ? (
+                  {authenticated ? (
                     <button className="ml-6 bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-4 mt-4 pt-2 pb-2 w-1/4 ">
-                      <Link to="/">Order Now</Link>
+                      Order Now
                     </button>
                   ) : (
                     <button className="ml-6 bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-4 mt-4 pt-2 pb-2 w-1/3 ">
