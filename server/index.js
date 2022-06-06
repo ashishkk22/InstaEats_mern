@@ -44,7 +44,11 @@ app.use(express.json());
 // });
 
 app.use(express.json());
-app.listen(5000);
+const port = process.env.PORT || 5000;
+app.listen(port);
+app.get("/", (req, res) => {
+  res.send("hello");
+});
 app.use("/items", itemRouter);
 app.use("/query", queryRouter);
 app.use("/user", authRouter);
