@@ -17,10 +17,10 @@ const SignUp = () => {
     dispatch(userSignUp({ dataForm, toast, navigate }));
   };
   return (
-    <section className="p-16 min-h-screen bg-secondaryWeb ">
-      <div className="flex items-center justify-center  ">
+    <section className="p-2 sm:p-16 min-h-screen bg-secondaryWeb ">
+      <div className="flex items-center justify-center w-full ">
         <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-xl">
-          <h3 className="text-2xl font-bold text-center">Sign Up</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-center">Sign Up</h3>
           <form action="" onSubmit={handleSubmit(onSubmitData)}>
             <div className="mt-4">
               <div>
@@ -77,11 +77,11 @@ const SignUp = () => {
                 />
                 <p className="text-primaryWeb">{errors.name?.message}</p>
               </div>
-              <div className="flex items-baseline justify-between mt-4">
-                <button className="bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-8 mt-4 pt-2 pb-2">
+              <div className="flex sm:items-baseline flex-col mt-4 sm:flex-row items-center">
+                <button className="bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-8    pt-2 pb-2 w-full sm:w-fit">
                   Sign Up
                 </button>
-                <p className="ml-6 text-primaryWeb rounded-lg p-1  px-1">
+                <p className="mt-6 sm:mt-0 sm:ml-6 text-primaryWeb rounded-lg p-1  px-1">
                   <Link to="/signin">Already Have an Account ?</Link>
                 </p>
               </div>

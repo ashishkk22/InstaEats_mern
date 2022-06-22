@@ -26,10 +26,12 @@ const ContactUs = () => {
     } catch (err) {}
   };
   return (
-    <section className="p-16 min-h-screen bg-secondaryWeb ">
+    <section className="p-2 sm:p-16 min-h-screen bg-secondaryWeb ">
       <div className="flex items-center justify-center  ">
         <div className="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-xl w-96">
-          <h3 className="text-2xl font-bold text-center">Contact Us</h3>
+          <h3 className="text-xl sm:text-2xl font-bold text-center">
+            Contact Us
+          </h3>
           <form action="" onSubmit={handleSubmit(onSubmitQuery)}>
             <div className="mt-4">
               <div>
@@ -94,7 +96,7 @@ const ContactUs = () => {
                 <p className="text-primaryWeb">{errors.query?.message}</p>
               </div>
               <div className="flex items-baseline justify-center mt-4">
-                <button className="bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-8 mt-4 pt-2 pb-2 w-40 ">
+                <button className="bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-8 mt-4 pt-2 pb-2  w-full">
                   Send
                 </button>
               </div>

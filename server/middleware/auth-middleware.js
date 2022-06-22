@@ -7,9 +7,7 @@ module.exports = async function (req, res, next) {
     if (!TOKEN) {
       throw new Error();
     }
-    console.log(TOKEN);
     const { id } = jwt.verify(TOKEN, process.env.JWT_SECRET);
-    console.log(id);
     req.user = await userModel.findById(id).select("-password");
     next();
   } catch (err) {

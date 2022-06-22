@@ -7,12 +7,15 @@ module.exports = async function (req, res, next) {
     if (!TOKEN) {
       throw new Error();
     }
-    console.log(TOKEN);
     const { id } = jwt.verify(TOKEN, process.env.JWT_SECRET);
-    console.log(id);
-    const data = await userModel.find();
-    req.user = await userModel.findById(id).select("-password");
-    next();
+    const data = await userModel.findById(id).select("-password");
+    if (data.role === "admin") {
+      next();
+    } else {
+      return res.status(401).json({
+        message: "unauthorized access",
+      });
+    }
   } catch (err) {
     res
       .status(401)

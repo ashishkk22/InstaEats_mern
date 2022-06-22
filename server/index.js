@@ -9,6 +9,10 @@ const authRouter = require("./routers/authRouter");
 const authMiddleware = require("./middleware/auth-middleware");
 const orderRouter = require("./routers/orderRouter");
 const cors = require("cors");
+const adminMiddleware = require("./middleware/admin-middleware");
+const { adminGetOrder } = require("./controller/adminController");
+const orderModel = require("./models/orderModel");
+const adminRouter = require("./routers/adminRouter");
 
 require("dotenv").config();
 const corsOptions = {
@@ -53,4 +57,4 @@ app.use("/items", itemRouter);
 app.use("/query", queryRouter);
 app.use("/user", authRouter);
 app.use("/order", authMiddleware, orderRouter);
-// app.use("/admin", adminMiddleware, )
+app.use("/admin", adminMiddleware, adminRouter);

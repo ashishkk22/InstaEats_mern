@@ -1,18 +1,3 @@
-const express = require("express");
-const expenseRouter = require("./routes/expenseRoute");
-const userRouter = require("./routes/userRoute");
-const connectDB = require("./config/db");
-const appError = require("./utils/appError");
-const errorController = require("./controllers/errorController");
-const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
-const xssProtection = require("xss-clean");
-const hpp = require("hpp");
-
-const app = express();
-const port = 3000;
-
 //global middleware
 //to set secure http headers
 app.use(helmet()); //we need function call in app.use, not a func

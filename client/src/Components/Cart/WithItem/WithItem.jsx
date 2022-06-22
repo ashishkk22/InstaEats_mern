@@ -17,7 +17,6 @@ const WithItem = () => {
   const { cart, itemTotalPrice } = useSelector(state => ({ ...state.item }));
   const { authenticated } = useSelector(state => ({ ...state.auth }));
   useEffect(() => {
-    console.log("cart useEffect called");
     dispatch(totalPrice());
   }, [cart, dispatch]);
   const {
@@ -39,39 +38,42 @@ const WithItem = () => {
   };
   return (
     <>
-      <section className="bg-secondaryWeb py-16">
-        <div className="container mx-auto sm:w-1/2">
-          <div className="flex flex-row items-center border-b border-gray-300 pb-4">
+      <section className="min-h-screen bg-secondaryWeb py-1 sm:py-10 md:py-16">
+        <div className="container mx-auto sm:w-10/12 md:w-8/12">
+          <div className="flex flex-row items-center border-b border-gray-300 pb-2 mt-3">
             <img src={cartBlack} alt="cart" />
-            <h2 className="font-bold ml-4 text-2xl">Order Summary</h2>
+            <h2 className="font-bold ml-4 text-lg sm:text-2xl">
+              Order Summary
+            </h2>
           </div>
           {cart.map(cart => {
             const { id, price, image, name, qty } = cart;
             return (
               <div className="item-list" key={id}>
-                <div className="flex flex-row items-center my-8">
+                <div className="flex flex-row items-center  my-8">
                   <img
                     src={require("../../../images/" + image + ".jpeg")}
                     alt="itemImg"
-                    className="w-40 h-32 rounded-md"
+                    className="sm:w-40 w-1/4 h-1/4 sm:h-32 rounded-md"
                   />
                   <div className="flex-1 ml-4">
-                    <h1>{name}</h1>
+                    <h1 className="text-xs sm:text-xl">{name}</h1>
                   </div>
-                  <div className="flex-1 justify-center items-center">
-                    <div className="flex justify-center items-center">
+                  <div className="flex-1 justify-center items-center w-full">
+                    <div className="flex justify-center items-center ">
                       <button
-                        className="font-bold text-lg text-secondaryWeb bg-primaryWeb rounded-lg p-2 mx-2"
+                        className="font-bold text-lg text-secondaryWeb bg-primaryWeb rounded sm:rounded-lg p-1 sm:p-2 mx-1 sm:mx-2"
                         onClick={() => dispatch(addToCart(cart))}
                       >
                         <img
                           src={require("../../../images/plus-16.png")}
                           alt="plus"
+                          className="w-1 sm:w-fit"
                         />
                       </button>
-                      <span className="">{qty} Qty</span>
+                      <span className="text-xs sm:text-xl">{qty} Qty</span>
                       <button
-                        className="font-bold text-lg text-secondaryWeb bg-primaryWeb rounded-lg p-2 mx-2 "
+                        className="font-bold text-lg text-secondaryWeb bg-primaryWeb rounded sm:rounded-lg p-1 sm:p-2 mx-1 sm:mx-2 "
                         onClick={() => {
                           dispatch(decreaseCart(cart));
                           dispatch(totalPrice());
@@ -80,11 +82,14 @@ const WithItem = () => {
                         <img
                           src={require("../../../images/minus-16.png")}
                           alt="minus"
+                          className="w-1 sm:w-fit"
                         />
                       </button>
                     </div>
                   </div>
-                  <span className=" font-bold text-lg">₹ {price}</span>
+                  <span className=" font-bold text-xs sm:text-lg">
+                    ₹ {price}
+                  </span>
                 </div>
               </div>
             );
@@ -93,8 +98,10 @@ const WithItem = () => {
           <hr />
           <div className="text-right py-4">
             <div>
-              <span className="text-lg font-bold">Total Amount: </span>
-              <span className="text-primaryWeb font-bold text-xl ml-2">
+              <span className="text-base sm:text-lg font-bold">
+                Total Amount:{" "}
+              </span>
+              <span className="text-primaryWeb font-bold  ml-2 text-base sm:text-lg">
                 ₹ {itemTotalPrice}
               </span>
             </div>
@@ -121,7 +128,7 @@ const WithItem = () => {
                       message: "Please enter the correct mobile number",
                     },
                   })}
-                  className="border p-2 mt-8 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
+                  className="border p-1 sm:p-2 mt-2 sm:mt-8 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
                   placeholder="Phone Number"
                 />
                 <p className="text-primaryWeb">{errors.name?.message}</p>
@@ -134,7 +141,7 @@ const WithItem = () => {
                       message: "Please enter the correct address",
                     },
                   })}
-                  className="border p-2 mt-4 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
+                  className="border p-1 sm:p-2 mt-2 sm:mt-4 focus:outline-none focus:ring-1 focus:ring-primaryWeb rounded-md"
                   placeholder="Address"
                 />
                 <p className="text-primaryWeb">{errors.name?.message}</p>
@@ -144,8 +151,10 @@ const WithItem = () => {
                       Order Now
                     </button>
                   ) : (
-                    <button className="ml-6 bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-4 mt-4 pt-2 pb-2 w-1/3 ">
-                      <Link to="/signin">Sign in to continue</Link>
+                    <button className="ml-6 bg-primaryWeb text-white font-bold rounded-full p-1 hover:bg-orange-500  delay-75 px-4  mt-0 sm:mt-4 pt-2 pb-2 w-fit sm:w-1/3 ">
+                      <Link to="/signin" className="text-sm sm:text-base">
+                        Sign in to continue
+                      </Link>
                     </button>
                   )}
                 </div>

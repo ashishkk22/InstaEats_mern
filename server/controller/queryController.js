@@ -26,3 +26,43 @@ module.exports.postQuery = async function postQuery(req, res) {
     return res.status(500).json({ message: "Db error" });
   }
 };
+
+//fetch all the query
+module.exports.getQueries = async function getQueries(req, res) {
+  try {
+    const data = await queryModel.find();
+    if (!data) {
+      return res.status(500).json({
+        message: "internal server error",
+      });
+    }
+    return res.status(200).json({
+      message: "data fetched successfully",
+      data,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "internal server error",
+    });
+  }
+};
+
+//delete the query
+module.exports.deleteQuery = async function deleteQuery(req, res) {
+  const { id } = req.body;
+  try {
+    const data = await queryModel.deleteOne({ _id: id });
+    if (!data) {
+      return res.status(500).json({
+        message: "internal server error",
+      });
+    }
+    return res.status(200).json({
+      message: "query deleted successfully",
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "internal server error",
+    });
+  }
+};

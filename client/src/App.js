@@ -9,40 +9,59 @@ import ContactUs from "./Components/ContactUs/ContactUs";
 import Cart from "./Components/Cart/Cart";
 import Footer from "./Components/Footer/Footer";
 import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import Orders from "./Components/Orders/Orders";
 import SingleOrder from "./Components/Orders/SingleOrder/SingleOrder";
 import ProtectedRouteOrder from "./protectedRoutes/ProtectedRouteOrder";
 import NotFound from "./Components/PageWithError/NotFound";
+import Loader from "./Loader/Loader";
+import Admin from "./Components/admin/Admin";
+import Queries from "./Components/admin/Queries";
+import { isAuthenticated } from "./redux/features/authSlice";
 function App() {
-  const { authenticated } = useSelector(state => ({ ...state.auth }));
+  const { authenticated, role } = useSelector(state => ({ ...state.auth }));
+  const { loading } = useSelector(state => ({ ...state.item }));
   // const { authenticated } = useSelector(state => ({ ...state.auth }));
-  // useEffect(() => {}, [authenticated]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!authenticated) {
+      dispatch(isAuthenticated());
+    }
+  }, [authenticated]);
+  useEffect(() => {}, [role]);
+
   return (
     <>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/signup" element={<SignUp />}></Route>
-          <Route path="/signin" element={<SignIn />}></Route>
-          <Route path="/contactus" element={<ContactUs />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
-
-          <Route
-            path="/orders"
-            element={authenticated ? <Orders /> : <SignIn />}
-          ></Route>
-          <Route
-            path="/orders/:id"
-            element={authenticated ? <SingleOrder /> : <SignIn />}
-          ></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-        <Footer />
-        <Toaster position="	top-right" />
-      </BrowserRouter>
+      {loading ? (
+        <Loader />
+      ) : (
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/signup" element={<SignUp />}></Route>
+            <Route path="/signin" element={<SignIn />}></Route>
+            <Route path="/contactus" element={<ContactUs />}></Route>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route
+              path="/orders"
+              element={role === "user" ? <Orders /> : <SignIn />}
+            ></Route>
+            <Route
+              path="/admin"
+              element={role === "admin" ? <Admin /> : <SignIn />}
+            ></Route>
+            <Route
+              path="/queries"
+              element={role === "admin" ? <Queries /> : <SignIn />}
+            ></Route>
+            <Route path="*" element={<NotFound />}></Route>
+          </Routes>
+          <Footer />
+          <Toaster position="	top-right" />
+        </BrowserRouter>
+      )}
     </>
   );
 }

@@ -29,6 +29,30 @@ export const userLogIn = createAsyncThunk(
     }
   }
 );
+export const userLogout = createAsyncThunk(
+  "auth/logout",
+  async ({ toast, navigate }, { rejectWithValue }) => {
+    try {
+      const res = await api.userLogOut();
+      toast.success("Logout Successful");
+      navigate("/");
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.res.data);
+    }
+  }
+);
+export const isAuthenticated = createAsyncThunk(
+  "auth/isAuth",
+  async rejectWithValue => {
+    try {
+      const res = await api.isAuth();
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -50,7 +74,7 @@ const authSlice = createSlice({
       state.authenticated = true;
     },
     [userSignUp.rejected]: (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.error = action.payload.message;
     },
     [userLogIn.pending]: (state, action) => {
@@ -58,14 +82,38 @@ const authSlice = createSlice({
     },
     [userLogIn.fulfilled]: (state, action) => {
       state.loading = false;
-      console.log(action.payload.data);
       state.email = action.payload.data.email;
       state.role = action.payload.data.role;
       state.authenticated = true;
     },
     [userLogIn.rejected]: (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.error = action.payload.message;
+    },
+    [userLogout.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [userLogout.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.email = "";
+      state.role = "";
+      state.authenticated = false;
+    },
+    [userLogout.rejected]: (state, action) => {
+      state.loading = false;
+    },
+    [isAuthenticated.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [isAuthenticated.fulfilled]: (state, action) => {
+      state.email = action.payload.user.email;
+      state.userName = action.payload.user.name;
+      state.authenticated = true;
+      state.loading = false;
+      state.role = action.payload.user.role;
+    },
+    [isAuthenticated.rejected]: (state, action) => {
+      state.loading = false;
     },
   },
 });

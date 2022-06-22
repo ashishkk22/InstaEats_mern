@@ -18,9 +18,8 @@ export const order = createAsyncThunk(
   "order",
   async ({ toast, obj, navigate }, { rejectWithValue }) => {
     try {
-      console.log(obj);
       const res = await api.newOrder(obj);
-      console.log(res);
+
       toast.success("Order Placed Successfully");
       navigate("/orders");
       return res.data;
@@ -78,7 +77,7 @@ const itemSlice = createSlice({
       const itemIndex = state.cart.findIndex(
         item => item.id === action.payload.id
       );
-      console.log(itemIndex);
+
       if (state.cart[itemIndex].qty > 1) {
         state.cart[itemIndex].qty -= 1;
         toast.success("Quantity decreased ");
@@ -100,7 +99,7 @@ const itemSlice = createSlice({
       state.items = action.payload;
     },
     [fetchItems.rejected]: (state, action) => {
-      state.loading = true;
+      state.loading = false;
     },
     [order.pending]: (state, action) => {
       state.loading = true;
@@ -111,7 +110,7 @@ const itemSlice = createSlice({
       state.cartTotalQty = 0;
     },
     [order.rejected]: (state, action) => {
-      state.loading = true;
+      state.loading = false;
     },
   },
 });
